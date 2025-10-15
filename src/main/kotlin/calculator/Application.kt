@@ -1,29 +1,31 @@
 package calculator
 
-class Calculator(var userInput: String) {
+class SeparatorCalculator(var userInput: String) {
 
     var sepList = mutableListOf(",", ":") // 구분자 리스트
-
-    fun printComponent() {
-        println(userInput)
-        println(sepList)
-    }
+    var numList: List<String> = listOf()
 
     // 구분자 찾아내는 함수
     fun findSeparator() {
-        val s = userInput.substring(0, 2) // 문자열 시작에서 //를 찾기 위함
-        val e = userInput.indexOf("\\n") // 문자열에서 \n의 인덱스
-        if (s == "//" && userInput.contains("\\n")) {
-            sepList.add(userInput.substring(2, e))
-            userInput = userInput.substring(e + 2, userInput.length)
+        if (userInput != "") {
+            val s = userInput.substring(0, 2) // 입력 문자열 시작에서 //를 찾기 위함
+            val e = userInput.indexOf("\\n") // 입력 문자열에서 \n의 인덱스
+            if (s == "//" && userInput.contains("\\n")) {
+                sepList.add(userInput.substring(2, e))
+                userInput = userInput.substring(e + 2, userInput.length)
+            }
         }
+        numList = userInput.split(Regex("[" + sepList.joinToString("") + "]")).filter{ it != "" }
     }
 
-    // 연산 후 결과를 출력하는 함수
+    // 예외처리 함수
+    fun exceptionCheck() {
+        if (numList.any{ it.toIntOrNull() == null || it.toInt() < 0 }) throw IllegalArgumentException("양의 정수가 아닌 문자를 입력하였습니다.")
+    }
+
+    // 연산 후 결과 출력 함수
     fun printResult() {
-        val numList = userInput.split(Regex("[" + sepList.joinToString("") + "]")).filter{ it != "" }
-        require(numList.all{ it.contains(Regex("[0-9]"))}) { "정수가 아닌 다른 문자가 입력되었습니다."}
-        val result = numList.map{ it.toInt() }.sumOf{ it }
+        val result = if (numList.isEmpty()) 0 else numList.map{ it.toInt() }.sumOf{ it }
         println("결과 : $result")
     }
 }
@@ -33,12 +35,8 @@ fun main() {
     println("덧셈할 문자열을 입력해 주세요.") // 시작 문구
     val userInput: String = readLine()?:"" // 사용자 입력
 
-    if (userInput.isEmpty()) {
-        println("0")
-    }  else {
-        val cal = Calculator(userInput)
-
-        cal.findSeparator()
-        cal.printResult()
-    }
+    val sc = SeparatorCalculator(userInput)
+    sc.findSeparator()
+    sc.exceptionCheck()
+    sc.printResult()
 }
