@@ -11,9 +11,11 @@ class Calculator(var userInput: String) {
 
     // 구분자 찾아내는 함수
     fun findSeparator() {
-        if (userInput.substring(0, 2) == "//" && userInput.substring(3, 5) == "\\n") {
-            sepList.add(userInput[2].toString())
-            userInput = userInput.substring(5)
+        val s = userInput.substring(0, 2) // 문자열 시작에서 //를 찾기 위함
+        val e = userInput.indexOf("\\n") // 문자열에서 \n의 인덱스
+        if (s == "//" && userInput.contains("\\n")) {
+            sepList.add(userInput.substring(2, e))
+            userInput = userInput.substring(e + 2, userInput.length)
         }
     }
 
@@ -36,10 +38,7 @@ fun main() {
     }  else {
         val cal = Calculator(userInput)
 
-        cal.printComponent()
         cal.findSeparator()
-
-        cal.printComponent()
         cal.printResult()
     }
 }
