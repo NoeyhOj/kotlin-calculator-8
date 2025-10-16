@@ -1,4 +1,5 @@
 package calculator
+import camp.nextstep.edu.missionutils.Console as camp
 
 // Model
 class Calculator {
@@ -16,7 +17,7 @@ class Calculator {
     // 커스텀 구분자를 구분자 목록에 추가하고 문자열을 리스트로 반환하는 함수
     fun findSeparatorAndSplit(): List<String> {
         var newExp = inputExp
-        if (inputExp != "") {
+        if (!inputExp.isBlank()) {
             val s = inputExp.substring(0, 2) // 입력 문자열 시작에서 //를 찾기 위함
             val e = inputExp.indexOf("\\n") // 입력 문자열에서 \n의 인덱스
             if (s == "//" && inputExp.contains("\\n")) {
@@ -53,7 +54,7 @@ class View {
 object Controller {
     fun run() {
         View.start()
-        val inputExp: String = readLine() ?: "" // 사용자 입력
+        val inputExp: String = camp.readLine() // 사용자 입력
         val cal = Calculator(inputExp)
 
         val numList = cal.findSeparatorAndSplit()
