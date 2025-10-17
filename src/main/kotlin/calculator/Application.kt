@@ -7,7 +7,7 @@ class Calculator {
         this.inputExp = inputExp
     }
     var inputExp: String = ""
-    val sepList = mutableListOf(",", ":") // 구분자 리스트
+    var sepString = ",:" // 구분자 리스트
 
     // 리스트의 값을 더하는 함수
     fun add(numList: List<String>): Int {
@@ -21,11 +21,11 @@ class Calculator {
             val s = inputExp.substring(0, 2) // 입력 문자열 시작에서 //를 찾기 위함
             val e = inputExp.indexOf("\\n") // 입력 문자열에서 \n의 인덱스
             if (s == "//" && inputExp.contains("\\n")) {
-                sepList.add(inputExp.substring(2, e))
+                sepString += inputExp.substring(2, e)
                 newExp = inputExp.substring(e + 2, inputExp.length)
             }
         }
-        return newExp.split(Regex("[" + sepList.joinToString("") + "]")).filter{ it != "" }
+        return newExp.split(Regex("[$sepString]")).filter{ it != "" }
     }
 
     // 예외 처리 함수
