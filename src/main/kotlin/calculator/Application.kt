@@ -25,7 +25,7 @@ class Calculator {
                 newExp = inputExp.substring(e + 2, inputExp.length)
             }
         }
-        return newExp.split(Regex("[$sepString]")).filter{ it != "" }
+        return newExp.split(sepString.toRegex()).filter{ it != "" }
     }
 
     // 예외 처리 함수
